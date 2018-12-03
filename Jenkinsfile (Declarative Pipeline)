@@ -1,0 +1,35 @@
+
+ node('Jenkins-ci-Jira') {
+    def servicej
+    
+    stage('Clone repository'){
+         /*Pour clone le referentiel sur notre repertoire de travail*/
+         checkout scm   
+    } 
+
+    stage('Build image'){
+        
+        servicej = docker.build('jenkins-ci-Jira/jira') 
+    
+    stage('Push image') {
+         /* je push l'image avec deux tags tags:
+         * Premier, le numéro de construction incrémental de Jenkins
+         * Second, the 'latest' tag * /
+    
+        docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
+            app.push("${env.BUILD_NUMBER}")
+            app.push("latest")
+    }
+
+    }
+    /*stage('TestImages'){
+  
+        app.inside {
+            sh 'echo "Tests passed"'
+        }
+
+            ******or*******
+     python 'build\jenkins-ci-jira/devops/pkg-jira/test_copy.py' Type of picture
+    }*/
+
+ }
